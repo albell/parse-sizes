@@ -33,6 +33,8 @@ function parseSizes(strValue) {
 	// http://www.w3.org/TR/CSS2/syndata.html#numbers
 	// CSS is ASCII case-insensitive:
 	// http://www.w3.org/TR/CSS2/syndata.html#characters )
+	// Spec allows exponential notation for <number> type:
+	// http://dev.w3.org/csswg/css-values/#numbers
 	var regexCssLengthWithUnits = /^(?:[+-]?[0-9]+|[0-9]*\.[0-9]+)(?:[eE][+-]?[0-9]+)?(?:ch|cm|em|ex|in|mm|pc|pt|px|rem|vh|vmin|vmax|vw)$/i;
 	
 	// (This is a quick and lenient test. Because of optional unlimited-depth internal
