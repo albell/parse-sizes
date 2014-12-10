@@ -1,24 +1,8 @@
 // Very loosely adapted from the W3C 'sizes' conformance checker at:
 // http://w3c-test.org/html/semantics/embedded-content/the-img-element/sizes/parse-a-sizes-attribute.html
+// Certain Invalid constructs like matching (), [] and {} are deliberately not handled.
 
 var tests = [
-	{
-		groupName: "Disallowed css-length units",
-		testArray: [	
-			{sizes: '0.1%',    expect: '100vw'},  
-			{sizes: '0.1deg',  expect: '100vw'},  
-			{sizes: '0.1grad', expect: '100vw'},  
-			{sizes: '0.1rad',  expect: '100vw'},
-			{sizes: '0.1turn', expect: '100vw'},
-			{sizes: '0.1s',    expect: '100vw'},
-			{sizes: '0.1ms',   expect: '100vw'},
-			{sizes: '0.1Hz',   expect: '100vw'},
-			{sizes: '0.1kHz',  expect: '100vw'},
-			{sizes: '0.1dpi',  expect: '100vw'},
-			{sizes: '0.1dpcm', expect: '100vw'},
-			{sizes: '0.1dppx', expect: '100vw'}
-		]
-	},
 	{
 		groupName: "No media condition",
 		testArray: [
@@ -49,8 +33,6 @@ var tests = [
 			{sizes: '0.01in',                    expect: '0.01in'},
 			{sizes: '0.1pc',                     expect: '0.1pc'},
 			{sizes: '0.1pt',                     expect: '0.1pt'},
-			{sizes: '/* */1px/* */',             expect: '100vw', desc: "CSS style comments"},
-			{sizes: ' /**/ /**/ 1px /**/ /**/ ', expect: '100vw'},
 			{sizes: '(),1px',                    expect: '1px'},
 			{sizes: 'x(),1px',                   expect: '1px'},
 			{sizes: '{},1px',                    expect: '1px'},
@@ -59,11 +41,8 @@ var tests = [
 			{sizes: '1px,x(',                    expect: '1px'},
 			{sizes: '1px,{',                     expect: '1px'},
 			{sizes: '1px,[',                     expect: '1px'},
-			{sizes: '\\(,1px',                   expect: '1px'},
-			{sizes: 'x\\(,1px',                  expect: '1px'},
-			{sizes: '\\{,1px',                   expect: '1px'},
-			{sizes: '\\[,1px',                   expect: '1px'},
-			{sizes: '1\\p\\x',                   expect: '100vw'}
+			{sizes: '1\\p\\x',                   expect: '100vw'},
+			{sizes: '25vw, 1px',                 expect: '25vw'}
 		]
 	},
 	{
@@ -72,6 +51,34 @@ var tests = [
 			{sizes: 'calc(1px)',                 expect: 'calc(1px)'},
 			{sizes: ' calc(5px + 5px)',          expect: 'calc(5px + 5px)'},
 			{sizes: 'calc((5px + 5px)*2)',       expect: 'calc((5px + 5px)*2)'}
+		]
+	},
+	{
+		groupName: "Disallowed css-length units",
+		testArray: [	
+			{sizes: '0.1%',    expect: '100vw'},  
+			{sizes: '0.1deg',  expect: '100vw'},  
+			{sizes: '0.1grad', expect: '100vw'},  
+			{sizes: '0.1rad',  expect: '100vw'},
+			{sizes: '0.1turn', expect: '100vw'},
+			{sizes: '0.1s',    expect: '100vw'},
+			{sizes: '0.1ms',   expect: '100vw'},
+			{sizes: '0.1Hz',   expect: '100vw'},
+			{sizes: '0.1kHz',  expect: '100vw'},
+			{sizes: '0.1dpi',  expect: '100vw'},
+			{sizes: '0.1dpcm', expect: '100vw'},
+			{sizes: '0.1dppx', expect: '100vw'}
+		]
+	},
+	{
+		groupName: "CSS style comments",
+		testArray: [
+			{sizes: '/* */1px/* */',             expect: '1px'},
+			{sizes: ' /**/ /**/ 1px /**/ /**/ ', expect: '1px'},
+			{sizes: '1/* */px',                  expect: '1px'},
+			{sizes: '1p/* */x',                  expect: '1px'},
+			{sizes: '-/**/0',                    expect: '-0'},			
+			{sizes: '/* 50vw',                   expect: '100vw'},			
 		]
 	},
 	{
@@ -163,19 +170,11 @@ var tests = [
 			{sizes: 'initial',                   expect: '100vw'},
 			{sizes: 'unset',                     expect: '100vw'},
 			{sizes: 'default',                   expect: '100vw'},
-			{sizes: '1/* */px',                  expect: '100vw'},
-			{sizes: '1p/* */x',                  expect: '100vw'},
-			{sizes: '-/**/0',                    expect: '100vw'},
-			{sizes: '((),1px',                   expect: '1px'},
-			{sizes: 'x(x(),1px',                 expect: '1px'},
-			{sizes: '{{},1px',                   expect: '1px'},
-			{sizes: '[[],1px',                   expect: '1px'},
 			{sizes: '1px !important',            expect: '100vw'},
 			{sizes: '\\1px',                     expect: '100vw'},
 			{sizes: 'all 1px',                   expect: '1px'},
 			{sizes: 'all and (min-width:0) 1px', expect: '1px'},
 			{sizes: 'min-width:0 1px',           expect: '100vw'},
-			{sizes: '25vw, 1px',                 expect: '25vw'},
 			{sizes: '50vw, (min-width:0) 1px',   expect: '50vw'},
 			{sizes: 'foo bar',                   expect: '100vw'},
 			{sizes: 'foo-bar',                   expect: '100vw'},
