@@ -66,7 +66,7 @@ function parseSizes(strValue) {
 	//  Quick tests: http://jsfiddle.net/gtntL4gr/3/
 	//  Returns an array of arrays.)
 	function parseComponentValues(str) {
-		var char;
+		var chrctr;
 		var component = "";
 		var componentArray = [];
 		var listArray = [];
@@ -76,9 +76,9 @@ function parseSizes(strValue) {
 	
 		// (Loop forwards from the beginning of the string.)
 		while (true) {
-			char = str[pos];
+			chrctr = str[pos];
 	
-		if (char === undefined) { // ( End of string reached.)
+		if (chrctr === undefined) { // ( End of string reached.)
 			if (component) {
 				componentArray.push(component);
 			}
@@ -87,7 +87,7 @@ function parseSizes(strValue) {
 			}
 			return listArray;
 		} else if (inComment) {
-			if ((char === "*") && (str[pos + 1] === "/")) {
+			if ((chrctr === "*") && (str[pos + 1] === "/")) {
 				inComment = false;
 				pos += 2;
 				continue;
@@ -95,7 +95,7 @@ function parseSizes(strValue) {
 				pos += 1; // (Skip all characters inside comments.)
 				continue;
 			}
-		} else if (isSpace(char)) {
+		} else if (isSpace(chrctr)) {
 			// (If previous character in loop was also a space, or if
 			// at the beginning of the string, do not add space char to
 			// component.)
@@ -109,13 +109,13 @@ function parseSizes(strValue) {
 				continue;
 			} else {
 				// (Replace any space character with a plain space for legibility.)
-				char = " ";	
+				chrctr = " ";	
 			}
-		} else if (char === "(") {
+		} else if (chrctr === "(") {
 			parenDepth += 1;
-		} else if (char === ")") {
+		} else if (chrctr === ")") {
 			parenDepth -= 1;
-		} else if (char === ",") {
+		} else if (chrctr === ",") {
 			if (component) {
 				componentArray.push(component);
 				component = "";
@@ -126,13 +126,13 @@ function parseSizes(strValue) {
 			}
 			pos += 1;
 			continue;
-		} else if ((char === "/") && (str[pos + 1] === "*")) {
+		} else if ((chrctr === "/") && (str[pos + 1] === "*")) {
 			inComment = true;
 			pos += 2;
 			continue;
 		} 
 
-		component = component + char;
+		component = component + chrctr;
 		pos += 1;
 		}
 	}
