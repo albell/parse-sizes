@@ -39,7 +39,7 @@ function parseSizes(strValue) {
 	
 	// (This is a quick and lenient test. Because of optional unlimited-depth internal
 	// grouping parens and strict spacing rules, this could get very complicated.)
-	var regexCssCalc = /^calc\((?:[0-9a-z \+\-\*\/\(\)]+)\)$/i;
+	var regexCssCalc = /^calc\((?:[0-9a-z \.\+\-\*\/\(\)]+)\)$/i;
 
 	var i;
 	var unparsedSizesList;
