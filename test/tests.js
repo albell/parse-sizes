@@ -75,10 +75,12 @@ var tests = [
 		testArray: [
 			{sizes: '/* */1px/* */',             expect: '1px'},
 			{sizes: ' /**/ /**/ 1px /**/ /**/ ', expect: '1px'},
-			{sizes: '1/* */px',                  expect: '1px'},
-			{sizes: '1p/* */x',                  expect: '1px'},
-			{sizes: '-/**/0',                    expect: '-0'},			
-			{sizes: '/* 50vw',                   expect: '100vw'},			
+			// Comment should break into two component values, much like a space.
+			{sizes: '1/* */px',                  expect: '100vw'},
+			{sizes: '1p/* */x',                  expect: '100vw'},
+			{sizes: '5/* */67px',                expect: '100vw'},
+			{sizes: '-/**/0',                    expect: '100vw'},
+			{sizes: '/* 50vw',                   expect: '100vw', desc: "unclosed comment"},
 		]
 	},
 	{

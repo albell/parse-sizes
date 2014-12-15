@@ -87,9 +87,13 @@ function parseSizes(strValue) {
 			}
 			return listArray;
 		} else if (inComment) {
-			if ((chrctr === "*") && (str[pos + 1] === "/")) {
+			if ((chrctr === "*") && (str[pos + 1] === "/")) { // (At end of a comment.)
 				inComment = false;
 				pos += 2;
+				if (component) {
+					componentArray.push(component);
+					component = "";
+				}
 				continue;
 			} else {
 				pos += 1; // (Skip all characters inside comments.)
