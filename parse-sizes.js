@@ -74,26 +74,33 @@ function parseSizes(strValue) {
 		var pos = 0;
 		var inComment = false;
 	
+		function pushComponent() {
+			if (component) {
+				componentArray.push(component);
+				component = "";
+			}
+		}
+
+		function pushComponentArray() {
+			if (componentArray[0]) {
+				listArray.push(componentArray);
+				componentArray = [];
+			}
+		}
+
 		// (Loop forwards from the beginning of the string.)
 		while (true) {
 			chrctr = str[pos];
 	
 		if (chrctr === undefined) { // ( End of string reached.)
-			if (component) {
-				componentArray.push(component);
-			}
-			if (componentArray[0]) {
-				listArray.push(componentArray);
-			}
+			pushComponent();
+			pushComponentArray();
 			return listArray;
 		} else if (inComment) {
 			if ((chrctr === "*") && (str[pos + 1] === "/")) { // (At end of a comment.)
 				inComment = false;
 				pos += 2;
-				if (component) {
-					componentArray.push(component);
-					component = "";
-				}
+				pushComponent();
 				continue;
 			} else {
 				pos += 1; // (Skip all characters inside comments.)
@@ -106,9 +113,8 @@ function parseSizes(strValue) {
 			if ((str[pos - 1] && isSpace(str[pos - 1])) || (!component)) {
 				pos += 1;
 				continue;
-			} else if ((parenDepth === 0) && component) {
-				componentArray.push(component);
-				component = "";
+			} else if (parenDepth === 0) {
+				pushComponent();
 				pos +=1;
 				continue;
 			} else {
@@ -120,14 +126,8 @@ function parseSizes(strValue) {
 		} else if (chrctr === ")") {
 			parenDepth -= 1;
 		} else if (chrctr === ",") {
-			if (component) {
-				componentArray.push(component);
-				component = "";
-			}
-			if (componentArray[0]) {
-				listArray.push(componentArray);
-				componentArray = [];
-			}
+			pushComponent()
+			pushComponentArray();
 			pos += 1;
 			continue;
 		} else if ((chrctr === "/") && (str[pos + 1] === "*")) {
