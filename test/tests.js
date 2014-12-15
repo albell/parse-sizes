@@ -112,6 +112,9 @@ var tests = [
 	{
 		groupName: "Compound media conditions",
 		testArray: [
+			{sizes: '(min-width:1px) and (min-width:1px) 1px', expect: '1px'},
+			{sizes: 'all and (min-width:0) 100vw, 1px',        expect: '100vw'},
+			{sizes: 'all and (min-width:0) 1px',               expect: '1px'},
 			// "or" from Media Queries Level 4 is not yet implemented in any browser
 			// http://dev.w3.org/csswg/mediaqueries4/#typedef-media-or
 			// https://code.google.com/p/chromium/issues/detail?id=442449
@@ -161,7 +164,6 @@ var tests = [
 			{sizes: '0.3E1px',                   expect: '0.3E1px'},
 			{sizes: '.4E1px',                    expect: '.4E1px'},
 			{sizes: 'all 100vw, 1px',            expect: '100vw'},
-			{sizes: 'all and (min-width:0) 100vw, 1px', expect: '100vw'},
 			{sizes: 'min-width:0 100vw, 1px',    expect: '1px'},
 			{sizes: '1px, 100vw',                expect: '1px'},
 			{sizes: '1px, (min-width:0) 100vw',  expect: '1px'},
@@ -179,7 +181,6 @@ var tests = [
 			{sizes: '1px !important',            expect: '100vw'},
 			{sizes: '\\1px',                     expect: '100vw'},
 			{sizes: 'all 1px',                   expect: '1px'},
-			{sizes: 'all and (min-width:0) 1px', expect: '1px'},
 			{sizes: 'min-width:0 1px',           expect: '100vw'},
 			{sizes: '50vw, (min-width:0) 1px',   expect: '50vw'},
 			{sizes: 'foo bar',                   expect: '100vw'},
