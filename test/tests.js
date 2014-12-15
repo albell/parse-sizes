@@ -50,7 +50,9 @@ var tests = [
 		testArray: [
 			{sizes: 'calc(1px)',                 expect: 'calc(1px)'},
 			{sizes: ' calc(5px + 5px)',          expect: 'calc(5px + 5px)'},
-			{sizes: 'calc((5px + 5px)*2)',       expect: 'calc((5px + 5px)*2)'}
+			{sizes: 'calc((5px + 5px)*2)',       expect: 'calc((5px + 5px)*2)'},
+			{sizes: 'calc(200px * 1.4)',         expect: 'calc(200px * 1.4)', desc: "floats in calc 1"},
+			{sizes: 'calc(20.2em + 10px)',       expect: 'calc(20.2em + 10px)', desc: "floats in calc 2"}
 		]
 	},
 	{
