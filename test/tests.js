@@ -112,14 +112,18 @@ var tests = [
 	{
 		groupName: "Compound media conditions",
 		testArray: [
-			{sizes: '(min-width:0) or (min-width:0) 1px', expect: '100vw'},
-			{sizes: '(min-width:0) or (unknown-mf-name) 1px', expect: '100vw'},
-			{sizes: '(min-width:0) or (min-width:unknown-mf-value) 1px', expect: '100vw'},
-			{sizes: '(min-width:0) or (min-width:-1px) 1px', expect: '100vw'},
-			{sizes: '(min-width:0) or ("unknown-general-enclosed") 1px', expect: '100vw'},
-			{sizes: '(min-width:0) or unknown-general-enclosed(foo) 1px', expect: '100vw'},
-			{sizes: '(min-width:0) or (!) 100vw, 1px', expect: '1px'},
-			{sizes: '(min-width:0) or unknown-media-type 100vw, 1px', expect: '1px'},
+			// "or" from Media Queries Level 4 is not yet implemented in any browser
+			// http://dev.w3.org/csswg/mediaqueries4/#typedef-media-or
+			// https://code.google.com/p/chromium/issues/detail?id=442449
+			// So the first eight tests here which use it will not pass.
+			{sizes: '(min-width:0) or (min-width:0) 1px', expect: '1px'},
+			{sizes: '(min-width:0) or (unknown-mf-name) 1px', expect: '1px'},
+			{sizes: '(min-width:0) or (min-width:unknown-mf-value) 1px', expect: '1px'},
+			{sizes: '(min-width:0) or (min-width:-1px) 1px', expect: '1px'},
+			{sizes: '(min-width:0) or ("unknown-general-enclosed") 1px', expect: '1px'},
+			{sizes: '(min-width:0) or unknown-general-enclosed(foo) 1px', expect: '1px'},
+			{sizes: '(min-width:0) or (!) 100vw, 1px', expect: '100vw'},
+			{sizes: '(min-width:0) or unknown-media-type 100vw, 1px', expect: '100vw'},
 			{sizes: '(123) 100vw, 1px',          expect: '1px'},
 			{sizes: 'not (123) 1px',             expect: '100vw'},
 			{sizes: '(!) 100vw, 1px',            expect: '1px'},
@@ -148,7 +152,7 @@ var tests = [
 	},
 	{
 		groupName: "Eccentric syntax",
-		testArray: [			
+		testArray: [
 			{sizes: '(min-width:0) 55px,,,,,',   expect: '55px', desc: "multiple trailing commas"},
 			{sizes: ',,,,(min-width:0) 55px',    expect: '55px', desc: "multiple leading commas"},
 			{sizes: '-0e-0px',                   expect: '-0e-0px'}, // seems legit ?!
@@ -157,12 +161,12 @@ var tests = [
 			{sizes: '0.3E1px',                   expect: '0.3E1px'},
 			{sizes: '.4E1px',                    expect: '.4E1px'},
 			{sizes: 'all 100vw, 1px',            expect: '100vw'},
-			{sizes: 'all and (min-width:0) 100vw, 1px',  expect: '100vw'},
+			{sizes: 'all and (min-width:0) 100vw, 1px', expect: '100vw'},
 			{sizes: 'min-width:0 100vw, 1px',    expect: '1px'},
 			{sizes: '1px, 100vw',                expect: '1px'},
 			{sizes: '1px, (min-width:0) 100vw',  expect: '1px'},
 			{sizes: '1px, foo bar',              expect: '1px'},
-			{sizes: '(min-width:0) 1px, foo bar',  expect: '1px'},
+			{sizes: '(min-width:0) 1px, foo bar', expect: '1px'},
 			{sizes: '100vw',                     expect: '100vw'},
 			{sizes: 'attr(data-foo, length, 1px)', expect: '100vw'},
 			{sizes: 'attr(data-foo, px, 1px)',   expect: '100vw'},
