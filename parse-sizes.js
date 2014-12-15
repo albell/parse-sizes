@@ -3,7 +3,7 @@
  *
  * By Alex Bell |  MIT License
  *
- * Non-strict but accurate and lightweight JS Parser for the string value  <img sizes="here">
+ * Non-strict but accurate and lightweight JS Parser for the string value <img sizes="here">
  *
  * Reference algorithm at:
  * https://html.spec.whatwg.org/multipage/embedded-content.html#parse-a-sizes-attribute
@@ -142,15 +142,12 @@ function parseSizes(strValue) {
 	}
 
 	function isValidNonNegativeSourceSizeValue(s) {
-	// ( http://www.w3.org/TR/CSS2/syndata.html#numbers says:
-	// "-0 is equivalent to 0 and is not a negative number." which means
-	// that unitless zero and unitless negative zero must be accepted as
-	// special cases.)
-		if (regexCssLengthWithUnits.test(s) && (parseFloat(s) >= 0)) {
-			return true;
-		} else if (regexCssCalc.test(s) || (s === "0") || (s === "-0") || (s === "+0")) {
-			return true;
-		}
+		if (regexCssLengthWithUnits.test(s) && (parseFloat(s) >= 0)) {return true;}
+		if (regexCssCalc.test(s)) {return true;}
+		// ( http://www.w3.org/TR/CSS2/syndata.html#numbers says:
+		// "-0 is equivalent to 0 and is not a negative number." which means that
+		// unitless zero and unitless negative zero must be accepted as special cases.)
+		if ((s === "0") || (s === "-0") || (s === "+0")) {return true;}
 		return false;
 	}
 
