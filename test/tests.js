@@ -41,7 +41,6 @@ var tests = [
 			{sizes: '1px,x(',                    expect: '1px'},
 			{sizes: '1px,{',                     expect: '1px'},
 			{sizes: '1px,[',                     expect: '1px'},
-			{sizes: '1\\p\\x',                   expect: '100vw'},
 			{sizes: '25vw, 1px',                 expect: '25vw'}
 		]
 	},
