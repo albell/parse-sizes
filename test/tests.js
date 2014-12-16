@@ -114,8 +114,11 @@ var tests = [
 		groupName: "Compound media conditions",
 		testArray: [
 			{sizes: '(min-width:1px) and (min-width:1px) 1px', expect: '1px'},
-			{sizes: 'all and (min-width:0) 100vw, 1px',        expect: '100vw'},
-			{sizes: 'all and (min-width:0) 1px',               expect: '1px'},
+			// "all" is allowed in a <media-query> but not allowed in a <media-condition>.
+			// However there is no easy way to evaluate a <media-condition> as opposed to
+			// a media query. These tests will currently fail. See Issue #3
+			{sizes: 'all and (min-width:0) 100vw, 1px',        expect: '1px'},
+			{sizes: 'all and (min-width:0) 1px',               expect: '100vw'},
 			// "or" from Media Queries Level 4 is not yet implemented in any browser
 			// http://dev.w3.org/csswg/mediaqueries4/#typedef-media-or
 			// https://code.google.com/p/chromium/issues/detail?id=442449
