@@ -35,45 +35,39 @@ function parseSizes(strValue) {
 	// http://www.w3.org/TR/CSS2/syndata.html#characters )
 	// Spec allows exponential notation for <number> type:
 	// http://dev.w3.org/csswg/css-values/#numbers
-	var regexCssLengthWithUnits = /^(?:[+-]?[0-9]+|[0-9]*\.[0-9]+)(?:[eE][+-]?[0-9]+)?(?:ch|cm|em|ex|in|mm|pc|pt|px|rem|vh|vmin|vmax|vw)$/i;
-	
+	var regexCssLengthWithUnits = /^(?:[+-]?[0-9]+|[0-9]*\.[0-9]+)(?:[eE][+-]?[0-9]+)?(?:ch|cm|em|ex|in|mm|pc|pt|px|rem|vh|vmin|vmax|vw)$/i,
+
 	// (This is a quick and lenient test. Because of optional unlimited-depth internal
 	// grouping parens and strict spacing rules, this could get very complicated.)
-	var regexCssCalc = /^calc\((?:[0-9a-z \.\+\-\*\/\(\)]+)\)$/i;
-
-	var i;
-	var unparsedSizesList;
-	var unparsedSizesListLength;
-	var unparsedSize;
-	var lastComponentValue;
-	var size;
+	    regexCssCalc = /^calc\((?:[0-9a-z \.\+\-\*\/\(\)]+)\)$/i,
+	    i, unparsedSizesList, unparsedSizesListLength, unparsedSize, lastComponentValue, size;
 
 	// UTILITY FUNCTIONS
 
 	// ( Manual is faster than RegEx.)
 	// http://jsperf.com/whitespace-character/5
-	function isSpace(c){
-		return (c === '\u0020' || // space
-		        c === '\u0009' || // horizontal tab
-		        c === '\u000A' || // new line
-		        c === '\u000C' || // form feed
-		        c === '\u000D');  // carriage return
+	function isSpace(c) {
+		return (c === "\u0020" || // space
+		        c === "\u0009" || // horizontal tab
+		        c === "\u000A" || // new line
+		        c === "\u000C" || // form feed
+		        c === "\u000D");  // carriage return
 	}
 
-	//  (Toy CSS parser. The goals here are: 
+	//  (Toy CSS parser. The goals here are:
 	//  1) expansive test coverage without the weight of a full CSS parser.
 	//  2) Avoiding regex wherever convenient.
 	//  Quick tests: http://jsfiddle.net/gtntL4gr/3/
 	//  Returns an array of arrays.)
 	function parseComponentValues(str) {
-		var chrctr;
-		var component = "";
-		var componentArray = [];
-		var listArray = [];
-		var parenDepth = 0;
-		var pos = 0;
-		var inComment = false;
-	
+		var chrctr,
+		    component = "",
+		    componentArray = [],
+		    listArray = [],
+		    parenDepth = 0,
+		    pos = 0,
+		    inComment = false;
+
 		function pushComponent() {
 			if (component) {
 				componentArray.push(component);
@@ -82,7 +76,7 @@ function parseSizes(strValue) {
 		}
 
 		function pushComponentArray() {
-			if (componentArray[0]) {
+			if (componentArray[ 0 ]) {
 				listArray.push(componentArray);
 				componentArray = [];
 			}
@@ -90,14 +84,14 @@ function parseSizes(strValue) {
 
 		// (Loop forwards from the beginning of the string.)
 		while (true) {
-			chrctr = str[pos];
-	
+			chrctr = str[ pos ];
+
 		if (chrctr === undefined) { // ( End of string reached.)
 			pushComponent();
 			pushComponentArray();
 			return listArray;
 		} else if (inComment) {
-			if ((chrctr === "*") && (str[pos + 1] === "/")) { // (At end of a comment.)
+			if ((chrctr === "*") && (str[ pos + 1 ] === "/")) { // (At end of a comment.)
 				inComment = false;
 				pos += 2;
 				pushComponent();
@@ -110,16 +104,16 @@ function parseSizes(strValue) {
 			// (If previous character in loop was also a space, or if
 			// at the beginning of the string, do not add space char to
 			// component.)
-			if ((str[pos - 1] && isSpace(str[pos - 1])) || (!component)) {
+			if ((str[ pos - 1 ] && isSpace(str[ pos - 1 ])) || (!component)) {
 				pos += 1;
 				continue;
 			} else if (parenDepth === 0) {
 				pushComponent();
-				pos +=1;
+				pos += 1;
 				continue;
 			} else {
 				// (Replace any space character with a plain space for legibility.)
-				chrctr = " ";	
+				chrctr = " ";
 			}
 		} else if (chrctr === "(") {
 			parenDepth += 1;
@@ -130,11 +124,11 @@ function parseSizes(strValue) {
 			pushComponentArray();
 			pos += 1;
 			continue;
-		} else if ((chrctr === "/") && (str[pos + 1] === "*")) {
+		} else if ((chrctr === "/") && (str[ pos + 1 ] === "*")) {
 			inComment = true;
 			pos += 2;
 			continue;
-		} 
+		}
 
 		component = component + chrctr;
 		pos += 1;
@@ -162,7 +156,7 @@ function parseSizes(strValue) {
 
 // For each unparsed size in unparsed sizes list:
 	for (i = 0; i < unparsedSizesListLength; i++) {
-		unparsedSize = unparsedSizesList[i];
+		unparsedSize = unparsedSizesList[ i ];
 
 		// 1. Remove all consecutive <whitespace-token>s from the end of unparsed size.
 		// ( parseComponentValues() already omits spaces outside of parens. )
@@ -177,7 +171,7 @@ function parseSizes(strValue) {
 		// invalid. Otherwise, there is a parse error; continue to the next iteration
 		// of this algorithm.
 		// http://dev.w3.org/csswg/css-syntax/#parse-component-value
-		lastComponentValue = unparsedSize[unparsedSize.length - 1];
+		lastComponentValue = unparsedSize[ unparsedSize.length - 1 ];
 
 		if (isValidNonNegativeSourceSizeValue(lastComponentValue)) {
 			size = lastComponentValue;
@@ -191,7 +185,7 @@ function parseSizes(strValue) {
 		// size. If unparsed size is now empty, return size and exit this algorithm.
 		// If this was not the last item in unparsed sizes list, that is a parse error.
 		if (unparsedSize.length === 0) {
-			if ((i !== unparsedSizesListLength -1) && window.console && console.log) {
+			if ((i !== unparsedSizesListLength - 1) && window.console && console.log) {
 				console.log("Parse error: " + strValue);
 			}
 			return size;
@@ -207,7 +201,7 @@ function parseSizes(strValue) {
 		// Can we just rely on the browser/polyfill to do it?)
 		unparsedSize = unparsedSize.join(" ");
 		if (!(window.matchMedia(unparsedSize).matches) ) {
-			continue;		
+			continue;
 		}
 
 		// 5. Return size and exit this algorithm.
@@ -216,5 +210,5 @@ function parseSizes(strValue) {
 
 	// If the above algorithm exhausts unparsed sizes list without returning a
 	// size value, return 100vw.
-	return '100vw';
+	return "100vw";
 }
