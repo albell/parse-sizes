@@ -84,14 +84,14 @@ function parseSizes(strValue) {
 
 		// (Loop forwards from the beginning of the string.)
 		while (true) {
-			chrctr = str[ pos ];
+			chrctr = str.charAt(pos);
 
-		if (chrctr === undefined) { // ( End of string reached.)
+		if (chrctr === "") { // ( End of string reached.)
 			pushComponent();
 			pushComponentArray();
 			return listArray;
 		} else if (inComment) {
-			if ((chrctr === "*") && (str[ pos + 1 ] === "/")) { // (At end of a comment.)
+			if ( (chrctr === "*") && (str.charAt(pos + 1) === "/") ) { // (At end of a comment.)
 				inComment = false;
 				pos += 2;
 				pushComponent();
@@ -104,7 +104,7 @@ function parseSizes(strValue) {
 			// (If previous character in loop was also a space, or if
 			// at the beginning of the string, do not add space char to
 			// component.)
-			if ((str[ pos - 1 ] && isSpace(str[ pos - 1 ])) || (!component)) {
+			if ((str.charAt(pos - 1) && isSpace(str.charAt(pos - 1) ) ) || (!component)) {
 				pos += 1;
 				continue;
 			} else if (parenDepth === 0) {
@@ -124,7 +124,7 @@ function parseSizes(strValue) {
 			pushComponentArray();
 			pos += 1;
 			continue;
-		} else if ((chrctr === "/") && (str[ pos + 1 ] === "*")) {
+		} else if ( (chrctr === "/") && (str.charAt( pos + 1 ) === "*") ) {
 			inComment = true;
 			pos += 2;
 			continue;
